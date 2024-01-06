@@ -20,5 +20,19 @@ public class Student extends User{
     public String toString() {
         return "ID: " + getId() + "\nName: " + getPassword() + "\nCourse: " + courses;
     }
+    
+    // Registers a student for a course if the course code is valid and shows an error message if invalid course code
+    public void registerCourse(String courseCode) {
+        if (isValidCourseCode(courseCode)) {
+            courses.add(courseCode);
+            System.out.println("Registered for course: " + courseCode);
+        } else {
+            System.out.println("Error: Invalid course code. Please enter a valid course code.");
+        }
+    }
 
+    // Checks if a course code is in a valid format
+    private boolean isValidCourseCode(String courseCode) {
+        return courseCode.matches("CS\\d{3}");      // "\d{3}" means that there are exactly three digits following "CS". 
+    }
 }
