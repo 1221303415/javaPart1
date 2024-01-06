@@ -1,0 +1,166 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Part1 {
+        static ArrayList<Student> listStudents = new ArrayList<>();
+        static ArrayList<Lecturer> listLecturers = new ArrayList<>();
+    public static void main(String[] args) {
+       initializeData();
+       Scanner input = new Scanner(System.in);
+        System.out.println("Welcome to Course Registeration");
+        char choice;
+        do {
+            dashboard();
+            choice = input.next().charAt(0);
+            switch (choice) {
+                case '1':
+                    createStudents(listStudents);
+                    break;
+        
+                case '2':
+                    createLecturers(listLecturers);
+                    break;
+        
+                case '7':
+                    viewList(listStudents, listLecturers);
+                    break;
+        
+                case '0':
+                    System.out.println("Thank you.");
+                    break;
+        
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != '0');
+}
+
+public static void initializeData(){
+    listStudents.add(new Student(1221,"Azraf"));
+    listStudents.add(new Student(1223,"Adam"));
+    listStudents.add(new Student(1225,"Bob"));
+    listStudents.add(new Student(1227,"Bubu"));
+    listStudents.add(new Student(1229,"Calli"));
+    listStudents.add(new Student(1231,"Cathy"));
+    listStudents.add(new Student(1233,"Daxton"));
+    listStudents.add(new Student(1235,"Didi"));
+
+    for (Student student : listStudents) {
+        if(student.getId() <= 1225)
+        student.addCourse("CS113");
+        else if(student.getId() <= 1229)
+        student.addCourse("CS123");
+        else if(student.getId() <= 1231)
+        student.addCourse("CS133");
+        else if(student.getId() <= 1235)
+        student.addCourse("CS143");
+    }
+
+    listLecturers.add(new Lecturer(2221, "NLK", "CS113"));
+    listLecturers.add(new Lecturer(2221, "BLK", "CS123"));
+    listLecturers.add(new Lecturer(2221, "ALK", "CS133"));
+    listLecturers.add(new Lecturer(2221, "CLK", "CS143"));
+
+}
+
+public static void dashboard(){
+    System.out.println("1) Create Students(Task 1)");
+    System.out.println("2) Create Lecturers(Task 1)");
+    System.out.println("3) (Task 2)");
+    System.out.println("4) (Task 3)");
+    System.out.println("5) (Task 4)");
+    System.out.println("6) (Task 5)");
+    System.out.println("7) View Students/Lecturers(Task 6)");
+}
+
+public static void createStudents(ArrayList<Student> listStudents) {
+    Scanner input = new Scanner(System.in);
+    int id;
+    String name;
+
+    do {
+        System.out.println("Enter student details (enter a negative ID to exit):");
+        System.out.print("ID: ");
+        id = input.nextInt();
+        input.nextLine(); // Consume the newline character
+
+        if (id >= 0) {
+            System.out.print("Name: ");
+            name = input.nextLine();
+
+            Student student = new Student(id, name);
+
+            // Adding Courses
+            System.out.print("Add Course (enter 'done' to finish): ");
+            String course;
+            do {
+                course = input.nextLine();
+                if (!course.equalsIgnoreCase("done")) {
+                    student.addCourse(course);
+                }
+            } while (!course.equalsIgnoreCase("done"));
+
+            if (!listStudents.contains(student)) {
+                listStudents.add(student);
+            } else {
+                System.out.println("Student with the same ID already exists. Please try again.");
+            }
+        }
+    } while (id >= 0);
+}
+
+
+public static void createLecturers(ArrayList<Lecturer> listLecturers) {
+    Scanner input = new Scanner(System.in);
+    int id;
+    String name;
+    String course;
+
+    do {
+        System.out.println("Enter lecturer details (enter a negative ID to exit):");
+        System.out.print("ID: ");
+        id = input.nextInt();
+        input.nextLine(); // Consume the newline character
+
+        if (id >= 0) {
+            System.out.print("Name: ");
+            name = input.nextLine();
+            input.nextLine();
+            System.out.print("Course: ");
+            course = input.nextLine();
+
+            Lecturer lecturer = new Lecturer(id, name, course);
+            if (!listLecturers.contains(lecturer)) {
+                listLecturers.add(lecturer);
+            } else {
+                System.out.println("Lecturer with the same ID already exists. Please try again.");
+            }
+        }
+    } while (id >= 0);
+}
+
+public static void viewList(ArrayList<Student> listStudents, ArrayList<Lecturer> listLecturers){
+    // To search Students and Lecturers in the Array
+    Scanner input = new Scanner(System.in);
+    String course;
+
+    System.out.print("Enter course: ");
+    course = input.next();
+
+    System.out.println("Students registered for course " + course + ":");
+    for (Student student : listStudents) {
+        ArrayList<String> courses = student.getCourses();
+        if (courses.contains(course)) {
+            System.out.println(student);
+        }
+    }
+
+    System.out.println("Lecturers assigned to course " + course + ":");
+    for (Lecturer lecturer : listLecturers) {
+        ArrayList<String> assignCourses = lecturer.getAssignCourses();
+        if (assignCourses.contains(course)) {
+            System.out.println(lecturer);
+        }
+    }
+}
+}
