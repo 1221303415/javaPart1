@@ -4,9 +4,13 @@ import java.util.Scanner;
 public class Part1 {
         static ArrayList<Student> listStudents = new ArrayList<>();
         static ArrayList<Lecturer> listLecturers = new ArrayList<>();
+        static User loggedInUser;
+
     public static void main(String[] args) {
        initializeData();
+
        Scanner input = new Scanner(System.in);
+
         System.out.println("Welcome to Course Registeration");
         char choice;
         do {
@@ -20,8 +24,18 @@ public class Part1 {
                 case '2':
                     createLecturers(listLecturers);
                     break;
-        
-                case '7':
+                
+                case '4':
+                    while (true) {
+                        if (loggedInUser == null) {
+                            login(input); // If no user is logged in, prompt for login
+                        } else {
+                            executeCommand(input); // If a user is logged in, execute commands
+                        }
+                    }
+
+
+                case '5':
                     viewList(listStudents, listLecturers);
                     break;
         
@@ -35,7 +49,7 @@ public class Part1 {
         } while (choice != '0');
 }
 
-public static void initializeData(){
+    public static void initializeData(){
     listStudents.add(new Student(1221,"Azraf"));
     listStudents.add(new Student(1223,"Adam"));
     listStudents.add(new Student(1225,"Bob"));
@@ -56,24 +70,26 @@ public static void initializeData(){
         student.addCourse("CS143");
     }
 
+    
     listLecturers.add(new Lecturer(2221, "NLK", "CS113"));
     listLecturers.add(new Lecturer(2221, "BLK", "CS123"));
     listLecturers.add(new Lecturer(2221, "ALK", "CS133"));
     listLecturers.add(new Lecturer(2221, "CLK", "CS143"));
 
+
 }
 
-public static void dashboard(){
+    public static void dashboard() {
     System.out.println("1) Create Students(Task 1)");
     System.out.println("2) Create Lecturers(Task 1)");
-    System.out.println("3) (Task 2)");
-    System.out.println("4) (Task 3)");
-    System.out.println("5) (Task 4)");
-    System.out.println("6) (Task 5)");
-    System.out.println("7) View Students/Lecturers(Task 6)");
+    System.out.println("3) Admin can create courses and assign courses courses to lecturers(Task 2)");
+    System.out.println("4) Login system(Task 3)");
+    System.out.println("4) Students self-register courses(Task 4)");
+    System.out.println("4) Lecturers can view all the students in their courses(Task 5)");
+    System.out.println("5) View Students/Lecturers(Task 6)");
 }
 
-public static void createStudents(ArrayList<Student> listStudents) {
+    public static void createStudents(ArrayList<Student> listStudents) {
     Scanner input = new Scanner(System.in);
     int id;
     String name;
@@ -109,8 +125,7 @@ public static void createStudents(ArrayList<Student> listStudents) {
     } while (id >= 0);
 }
 
-
-public static void createLecturers(ArrayList<Lecturer> listLecturers) {
+    public static void createLecturers(ArrayList<Lecturer> listLecturers) {
     Scanner input = new Scanner(System.in);
     int id;
     String name;
@@ -139,7 +154,7 @@ public static void createLecturers(ArrayList<Lecturer> listLecturers) {
     } while (id >= 0);
 }
 
-public static void viewList(ArrayList<Student> listStudents, ArrayList<Lecturer> listLecturers){
+    public static void viewList(ArrayList<Student> listStudents, ArrayList<Lecturer> listLecturers) {
     // To search Students and Lecturers in the Array
     Scanner input = new Scanner(System.in);
     String course;
@@ -161,6 +176,112 @@ public static void viewList(ArrayList<Student> listStudents, ArrayList<Lecturer>
         if (assignCourses.contains(course)) {
             System.out.println(lecturer);
         }
+    }
+}
+
+    // Method to handle user login
+    private static void login(Scanner input) {
+    System.out.print("Enter id: ");
+    int id = input.nextInt();
+    input.nextLine();
+    System.out.print("Enter password: ");
+    String name = input.nextLine();
+
+    loggedInUser = authenticateUser(id, name);
+
+    if (loggedInUser != null) {
+        System.out.println("\n\nLogin successful!");
+    } else {
+        System.out.println("Invalid id or password. Please try again.\n");
+    }
+}
+
+    // Method to authenticate user based on provided credentials
+    private static User authenticateUser(int id, String name) {
+    for (Student student : listStudents) {
+        // Check if the provided id and password match a student's credentials
+        if (student.getId() == id && student.getPassword().equals(name)) {
+            return student;
+        }
+    }
+
+    for (Lecturer lecturer : listLecturers) {
+        // Check if the provided id and password match a lecturer's credentials
+        if (lecturer.getId() == id && lecturer.getPassword().equals(name)) {
+            return lecturer;
+        }
+    }
+
+    return null;
+}
+
+    // Method to handle user commands
+    private static void executeCommand(Scanner input) {
+
+    // Display user information and prompt for a command
+    System.out.print("\nYou are a " + loggedInUser.getUserType() + " (" 
+                    + loggedInUser.getId() + ")\nEnter command (type 'logout' to logout): "); 
+    String command = input.nextLine();
+
+     // Check if the user wants to log out
+    if (command.equalsIgnoreCase("logout")) {
+        loggedInUser = null;        // Set loggedInUser to null, indicating the user has logged out
+        System.out.println("Logged out successfully.\n");
+    } 
+
+    // Check if the logged-in user is a Student
+    else if (loggedInUser instanceof Student) {
+        processStudentCommand(command);
+    } 
+
+    // Check if the logged-in user is a Lecturer
+    else if (loggedInUser instanceof Lecturer) {
+        processLecturerCommand(command);
+    }
+}
+
+    // Method to handle student-specific commands
+    private static void processStudentCommand(String command) {
+
+    // Checks if the command starts with "register"
+    if (command.startsWith("register")) {
+
+        // Extracts the course code part from the command after "register" and trim any extra spaces
+        String courseCode = command.substring("register".length()).trim();
+        Student student = (Student) loggedInUser;   // Gets the logged-in user as a Student
+
+        // Registers the student for the specified course
+        student.registerCourse(courseCode);
+    } else {
+        System.out.println("Invalid command for student.");
+    }
+}
+
+    // Method to handle lecturer-specific commands
+    private static void processLecturerCommand(String command) {
+
+    // Checks if the command starts with "view student"
+    if (command.startsWith("view student")) {
+
+        // Extracts the course code part from the command after "view student" and trim any extra spaces
+        String courseCode = command.substring("view student".length()).trim(); // 
+        Lecturer lecturer = (Lecturer) loggedInUser;
+
+        // Checks if the lecturer is assigned to the specified course
+        if (lecturer.getAssignCourses().contains(courseCode)) {
+            System.out.println("Students in course " + courseCode + ":");
+
+            for (Student student : listStudents) {  // Iterate through all students
+                // Checks if the student is registered for the specified course
+                if (student.getCourses().contains(courseCode)) {
+                    System.out.println("- " + student.getId());
+                }
+            }
+        } else {
+            System.out.println("You are not assigned to course " + courseCode);
+        }
+    } else {
+        System.out.println("Invalid command for lecturer.");
     }
 }
 }
