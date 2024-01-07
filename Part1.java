@@ -31,13 +31,13 @@ public class Part1 {
                     break;
                 
                 case '4':
-                    while (true) {
-                        if (loggedInUser == null) {
-                            login(input); // If no user is logged in, prompt for login
-                        } else {
-                            executeCommand(input); // If a user is logged in, execute commands
-                        }
+                    while (loggedInUser == null) {
+                        login(input); // If no user is logged in, prompt for login
                     }
+                    while (loggedInUser != null) {
+                        executeCommand(input); // If a user is logged in, execute commands
+                    }
+                    break;
 
                 case '5':
                     viewList(listStudents, listLecturers);
