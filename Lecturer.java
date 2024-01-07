@@ -1,4 +1,5 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Lecturer extends User {
     private ArrayList<String> assignCourses;
