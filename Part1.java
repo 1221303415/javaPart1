@@ -89,7 +89,7 @@ public class Part1 {
         System.out.println("4) Students self-register courses(Task 4)");
         System.out.println("4) Lecturers can view all the students in their courses(Task 5)");
         System.out.println("5) View Students/Lecturers(Task 6)");
-        System.out.println("0)Exit");
+        System.out.println("0) Exit");
     }
 //--------------------------------------------------------------------------------------------------
     public static void assignCourse(ArrayList<Lecturer> listLecturers) {
