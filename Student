@@ -18,7 +18,7 @@ public class Student extends User{
         courses.remove(course);
     }
     public String toString() {
-        return "ID: " + getId() + "\nName: " + getPassword() + "\nCourse: " + courses;
+        return "ID: " + getId() + "\tName: " + getPassword() + "\nCourse: " + courses;
     }
     
     // Registers a student for a course if the course code is valid and shows an error message if invalid course code
