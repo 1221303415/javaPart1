@@ -158,7 +158,6 @@ public class Part1 {
             if (id >= 0) {
                 System.out.print("Name: ");
                 name = input.nextLine();
-                input.nextLine();
                 System.out.print("Course: ");
                 course = input.nextLine();
 
