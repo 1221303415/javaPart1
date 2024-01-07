@@ -14,6 +14,7 @@ public class Part1 {
         System.out.println("Welcome to Course Registeration");
         char choice;
         do {
+            System.out.println();
             dashboard();
             choice = input.next().charAt(0);
             switch (choice) {
@@ -87,6 +88,7 @@ public class Part1 {
     System.out.println("4) Students self-register courses(Task 4)");
     System.out.println("4) Lecturers can view all the students in their courses(Task 5)");
     System.out.println("5) View Students/Lecturers(Task 6)");
+    System.out.println("0)Exit");
 }
 
     public static void createStudents(ArrayList<Student> listStudents) {
@@ -110,7 +112,7 @@ public class Part1 {
             System.out.print("Add Course (enter 'done' to finish): ");
             String course;
             do {
-                course = input.nextLine();
+                course = input.next();
                 if (!course.equalsIgnoreCase("done")) {
                     student.addCourse(course);
                 }
