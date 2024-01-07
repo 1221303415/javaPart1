@@ -11,7 +11,7 @@ public class Part1 {
 
        Scanner input = new Scanner(System.in);
 
-        System.out.println("Welcome to Course Registeration");
+        System.out.println("Welcome to Course Registration");
         char choice;
         do {
             System.out.println();
@@ -24,6 +24,10 @@ public class Part1 {
         
                 case '2':
                     createLecturers(listLecturers);
+                    break;
+
+                case '3' :
+                    assignCourse( listLecturers);
                     break;
                 
                 case '4':
@@ -73,10 +77,9 @@ public class Part1 {
 
     
     listLecturers.add(new Lecturer(2221, "NLK", "CS113"));
-    listLecturers.add(new Lecturer(2221, "BLK", "CS123"));
-    listLecturers.add(new Lecturer(2221, "ALK", "CS133"));
-    listLecturers.add(new Lecturer(2221, "CLK", "CS143"));
-
+    listLecturers.add(new Lecturer(2223, "BLK", "CS123"));
+    listLecturers.add(new Lecturer(2225, "ALK", "CS133"));
+    listLecturers.add(new Lecturer(22273, "CLK", "CS143"));
 
 }
 
@@ -90,7 +93,22 @@ public class Part1 {
     System.out.println("5) View Students/Lecturers(Task 6)");
     System.out.println("0)Exit");
 }
+//--------------------------------------------------------------------------------------------------
+public static void assignCourse(ArrayList<Lecturer> listLecturers) {
 
+    Scanner input = new Scanner(System.in);
+    System.out.print("Enter new Course: ");
+    String course = input.nextLine();
+    System.out.println("Enter Lecturer's ID: ");
+    int lecturerId = input.nextInt();
+
+    for (Lecturer l : listLecturers) {
+        if (l.getId() == lecturerId) {
+            l.addCourse(course);
+        }
+    }
+}
+//-----------------------------------------------------------------------------------------------------
     public static void createStudents(ArrayList<Student> listStudents) {
     Scanner input = new Scanner(System.in);
     int id;
@@ -157,6 +175,7 @@ public class Part1 {
 }
 
     public static void viewList(ArrayList<Student> listStudents, ArrayList<Lecturer> listLecturers) {
+
     // To search Students and Lecturers in the Array
     Scanner input = new Scanner(System.in);
     String course;
@@ -164,7 +183,7 @@ public class Part1 {
     System.out.print("Enter course: ");
     course = input.next();
 
-    System.out.println("Students registered for course " + course + ":");
+    System.out.println("Students registered for course " + ": " + course);
     for (Student student : listStudents) {
         ArrayList<String> courses = student.getCourses();
         if (courses.contains(course)) {
@@ -172,7 +191,7 @@ public class Part1 {
         }
     }
 
-    System.out.println("Lecturers assigned to course " + course + ":");
+    System.out.println("Lecturers assigned to course " + ": " + course);
     for (Lecturer lecturer : listLecturers) {
         ArrayList<String> assignCourses = lecturer.getAssignCourses();
         if (assignCourses.contains(course)) {
